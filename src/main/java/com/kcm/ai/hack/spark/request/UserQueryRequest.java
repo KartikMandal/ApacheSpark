@@ -1,13 +1,26 @@
 package com.kcm.ai.hack.spark.request;
 
 public class UserQueryRequest {
-    private String userQuery;
 
-    public String getUserQuery() {
-        return userQuery;
+    private int id;
+    private String name;
+
+
+    public int getId() {
+        return id;
     }
 
-    public void setUserQuery(String userQuery) {
-        this.userQuery = userQuery;
+    public void setId(int id) {
+        this.id = id;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
 }

@@ -1,14 +1,14 @@
 package com.kcm.ai.hack.spark.controller;
 
+import com.kcm.ai.hack.spark.request.UserQueryRequest;
 import com.kcm.ai.hack.spark.service.CsvToParquetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.List;
 
 @RestController
@@ -47,5 +47,38 @@ public class ApacheSparkController {
                     .body("{\"error\": \"" + e.getMessage().replace("\"", "'") + "\"}");
         }
     }
+
+
+    @PostMapping("/spark-file")
+    public ResponseEntity<String> csvToParquetWithFile(@RequestBody File f) {
+        try {
+            List<String> jsonList = csvToParquetService.csvToParquetWithFile(f); // Extract from JSON
+            // Combine as a JSON array
+            String jsonArray = "[" + String.join(",", jsonList) + "]";
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(jsonArray);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("{\"error\": \"" + e.getMessage().replace("\"", "'") + "\"}");
+        }
+    }
+
+    @PostMapping("/spark-iceberg-obj")
+    public ResponseEntity<String> csvToParquetUsingApacheIcebergeWithVariable(@RequestBody List<UserQueryRequest> userList) {
+        try {
+            List<String> jsonList = csvToParquetService.csvToParquetUsingApacheIcebergeWithVariable(userList); // Extract from JSON
+            // Combine as a JSON array
+            String jsonArray = "[" + String.join(",", jsonList) + "]";
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(jsonArray);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("{\"error\": \"" + e.getMessage().replace("\"", "'") + "\"}");
+        }
+    }
+
+
 }
 
