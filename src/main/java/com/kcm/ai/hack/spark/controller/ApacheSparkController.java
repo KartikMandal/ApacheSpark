@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.List;
@@ -49,10 +50,13 @@ public class ApacheSparkController {
     }
 
 
-    @PostMapping("/spark-file")
-    public ResponseEntity<String> csvToParquetWithFile(@RequestBody File f) {
+    @PostMapping(value = "/spark-file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> csvToParquetWithFile(@RequestParam("file") MultipartFile file) {
         try {
-            List<String> jsonList = csvToParquetService.csvToParquetWithFile(f); // Extract from JSON
+            File tempFile = File.createTempFile("upload", ".csv");
+            file.transferTo(tempFile);
+
+            List<String> jsonList = csvToParquetService.csvToParquetWithFile(tempFile);
             // Combine as a JSON array
             String jsonArray = "[" + String.join(",", jsonList) + "]";
             return ResponseEntity.ok()

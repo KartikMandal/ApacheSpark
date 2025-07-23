@@ -123,3 +123,16 @@ First Run:
 Second Run:
 ![img_3.png](img_3.png)
 
+Method: POST
+URL: http://localhost:8080/spark-file
+Headers (automatically set by Postman):
+
+`Content-Type: multipart/form-data`
+
+Body → Select form-data:
+
+Key	Value	Type
+file	Select your CSV	File
+Example:
+![img_4.png](img_4.png)
+
